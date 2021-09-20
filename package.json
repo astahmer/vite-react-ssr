@@ -5,8 +5,10 @@
         "dev": "node -r @swc-node/register -r tsconfig-paths/register ./src/server",
         "build:server": "vite build && vite build --ssr",
         "build:ssg": "vite-plugin-ssr prerender",
+        "prebuild": "rimraf dist",
         "build": "yarn build:server && yarn build:ssg",
         "serve": "vite preview",
+        "start": "NODE_ENV=production node -r @swc-node/register -r tsconfig-paths/register ./src/server",
         "prettier": "prettier --write \"./{src,tests}/**/*\""
     },
     "dependencies": {

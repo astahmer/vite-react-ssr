@@ -6,6 +6,8 @@ import { createPageRenderer } from "vite-plugin-ssr";
 const isProduction = process.env.NODE_ENV === "production";
 const rootDir = process.cwd();
 const root = `${__dirname}/..`;
+// const root = path.join(rootDir, isProduction ? "dist/server" : "src/server");
+console.log({ rootDir, root, prod: isProduction ? rootDir : root });
 
 startServer();
 
@@ -14,7 +16,7 @@ export async function startServer() {
 
     let viteDevServer;
     if (isProduction) {
-        app.use(express.static(`${root}/dist/client`, { index: false }));
+        app.use(express.static(`${rootDir}/dist/client`, { index: false }));
     } else {
         const vite = await import("vite");
         const { default: reactRefresh } = await import("@vitejs/plugin-react-refresh");
@@ -30,7 +32,7 @@ export async function startServer() {
         app.use(viteDevServer.middlewares);
     }
 
-    const renderPage = createPageRenderer({ viteDevServer, isProduction, root });
+    const renderPage = createPageRenderer({ viteDevServer, isProduction, root: isProduction ? rootDir : root });
     app.get("*", async (req, res, next) => {
         const url = req.originalUrl;
         const pageContextInit = { url };
